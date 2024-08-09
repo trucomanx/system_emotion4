@@ -1,5 +1,5 @@
-# fcnn_emotion4_fusion
-fcnn_emotion4_fusion
+# system_emotion4
+system_emotion4
 
 # Using library
 Since the code uses an old version of keras, it needs to be placed at the beginning of the main.py code.
@@ -7,14 +7,14 @@ Since the code uses an old version of keras, it needs to be placed at the beginn
     import os
     os.environ['TF_USE_LEGACY_KERAS'] = '1'
 
-    import FusionEmotion4Lib.Classifier as fec
-    import numpy as np
+    import SystemEmotion4Lib.Classifier as sec
+    from PIL import Image
+    
+    cls=sec.Emotion4Classifier();
 
-    cls=fec.Emotion4Classifier();
+    img_pil = Image.new('RGB', (400,300), 'white');
 
-    vec=np.random.rand(12);
-
-    res=cls.predict_vec(vec);
+    res=cls.from_img_pil(img_pil);
 
     print(res);
 
@@ -56,5 +56,11 @@ Since the code uses an old version of keras, it needs to be placed at the beginn
     pip3 install dist/FusionEmotion4Lib-*.tar.gz
 
 # Installation summary
+
+    git clone https://github.com/trucomanx/system_emotion4
+    cd system_emotion4/library
+    python3 setup.py sdist
+    pip3 install dist/SystemEmotion4Lib-*.tar.gz
+
 
 

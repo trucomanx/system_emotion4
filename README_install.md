@@ -2,11 +2,11 @@
 
 Download the source code
     
-    git clone https://github.com/trucomanx/fcnn_emotion4_fusion
+    git clone https://github.com/trucomanx/system_emotion4
 
-The next command generates the `dist/FusionEmotion4Lib-VERSION.tar.gz` file.
+The next command generates the `dist/SystemEmotion4Lib-VERSION.tar.gz` file.
 
-    cd fcnn_emotion4_fusion/library
+    cd system_emotion4/library
     python3 setup.py sdist
 
 For more informations use `python setup.py --help-commands`
@@ -15,8 +15,8 @@ For more informations use `python setup.py --help-commands`
 
 Install the packaged library
 
-    pip3 install dist/FusionEmotion4Lib-*.tar.gz
+    pip3 install dist/SystemEmotion4Lib-*.tar.gz
 
 # Uninstall
 
-    pip3 uninstall FusionEmotion4Lib
+    pip3 uninstall SystemEmotion4Lib
