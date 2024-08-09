@@ -1,0 +1,11 @@
+{
+    "dataset_base_dir" : "/media/fernando/Expansion/DATASET/TESE/BER/BER2024-SOURCE",
+    "dataset_labels_file" : "train.csv",
+    "dataset_name" : "ber2024",
+    "checkpoint": "shufflenetv2k16",
+    "model_type_body": "efficientnet_b3",
+    "model_type_face": "efficientnet_b3",
+    "model_type_skel": 20,
+    "model_type_fusion": 11,
+    "output_base_dir" : "output"
+}
