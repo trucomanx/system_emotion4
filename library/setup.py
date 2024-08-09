@@ -27,13 +27,12 @@ setup(
         'SystemEmotion4Lib': ['*.py','models/*.h5']
     },
     install_requires=[ #"Django >= 1.1.1",
-       "tensorflow",
-       "tensorflow-hub",
-       "opencv-python", 
-       "matplotlib",
-       "numpy",
-       "nvidia-cudnn-cu11",
-       "tf-keras"
+       "OpenPifPafTools",
+       "FaceEmotion4Lib",
+       "BodyEmotion4Lib",
+       "SkeletonEmotion4Lib",
+       "FusionEmotion4Lib",
+       "tensorflow"
     ],
 )
 
