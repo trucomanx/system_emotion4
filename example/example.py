@@ -18,4 +18,10 @@ res=cls.from_img_pil(img_pil);
 
 print(filepath,labels[res]);
 
+import numpy as np
+
+res=cls.get_input_fusion_from_pil(img_pil);
+print(res)
+
+
 
