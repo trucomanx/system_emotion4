@@ -42,7 +42,7 @@ class Emotion4Classifier:
 
         self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion);
 
-    def predict_pil(self,pil_img):
+    def get_input_fusion_from_pil(self,pil_img):
         """Classify a body language data from a numpy vector object with N elements 
         
         Args:
@@ -65,6 +65,20 @@ class Emotion4Classifier:
         
         if skel_vec is not None:
             res_skel = self.cls_skel.predict_vec(skel_vec);
+        
+        return res_face, res_body, res_skel;
+
+    def predict_pil(self,pil_img):
+        """Classify a body language data from a numpy vector object with N elements 
+        
+        Args:
+            pil_img: PIL image 
+        
+        Returns:
+            numpy.array: A numpy array of 4 elements.
+        """
+        
+        res_face, res_body, res_skel = self.get_input_fusion_from_pil(pil_img);
 
         fusion_vec = np.concatenate((res_face, res_body, res_skel));
         
