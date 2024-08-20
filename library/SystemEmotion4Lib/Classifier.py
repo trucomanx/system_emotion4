@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import sys
 import numpy as np
 
 import OpenPifPafTools.RoiDetector    as opp
@@ -25,6 +26,7 @@ class Emotion4Classifier:
                     model_type_face='efficientnet_b3',
                     model_type_body='efficientnet_b3',
                     model_type_skel=20,
+                    model_type_skel_minus=None,
                     model_type_fusion=11):
         """Inicializer of class Emotion4Classifier.
         
@@ -38,9 +40,9 @@ class Emotion4Classifier:
 
         self.cls_body=bec.Emotion4Classifier(model_type=model_type_body);
 
-        self.cls_skel=sec.Emotion4Classifier(ncod=model_type_skel);
+        self.cls_skel=sec.Emotion4Classifier(ncod=model_type_skel, minus=model_type_skel_minus);
 
-        self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion);
+        self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion, minus=model_type_skel_minus);
 
     def get_input_fusion_from_pil(self,pil_img):
         """Classify a body language data from a numpy vector object with N elements 
@@ -52,19 +54,20 @@ class Emotion4Classifier:
             numpy.array: A numpy array of 4 elements.
         """
         skel_vec, body_roi, face_roi=self.det.process_image(pil_img);
+        if skel_vec is None:
+            print('Error because skel_vec is None');
+            sys.exit();
         
         res_body=np.array([0.0,0.0,0.0,0.0]);
         res_face=np.array([0.0,0.0,0.0,0.0]);
-        res_skel=np.array([0.0,0.0,0.0,0.0]);
-        
+                
         if body_roi is not None:
             res_body = self.cls_body.predict_pil(body_roi);
         
         if face_roi is not None:
             res_face = self.cls_face.predict_pil(face_roi);
         
-        if skel_vec is not None:
-            res_skel = self.cls_skel.predict_vec(skel_vec);
+        res_skel = self.cls_skel.predict_vec(skel_vec);
         
         return res_face, res_body, res_skel;
 
