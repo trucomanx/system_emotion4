@@ -22,7 +22,8 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-file "train.csv" \
                             --dataset-name $DName \
                             --sub-dir $SubDir \
-                            --enable-minus true\
+                            --enable-minus true \
+                            --clean-break 16 \
                             --output-dir $OutDir
 
 python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
@@ -34,7 +35,8 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-file "test.csv" \
                             --dataset-name $DName \
                             --sub-dir $SubDir \
-                            --enable-minus true\
+                            --enable-minus true \
+                            --clean-break 16 \
                             --output-dir $OutDir
 
 rm -f system_accuracy.py
