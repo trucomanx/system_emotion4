@@ -23,7 +23,7 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-name $DName \
                             --sub-dir $SubDir \
                             --enable-minus true \
-                            --clean-break 16 \
+                            --clean-break 100 \
                             --output-dir $OutDir
 
 python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
@@ -36,7 +36,7 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-name $DName \
                             --sub-dir $SubDir \
                             --enable-minus true \
-                            --clean-break 16 \
+                            --clean-break 100 \
                             --output-dir $OutDir
 
 rm -f system_accuracy.py
