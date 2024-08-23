@@ -95,12 +95,30 @@ class Emotion4Classifier:
         """
         
         res_face, res_body, res_skel = self.get_input_fusion_from_pil(pil_img);
-
+        
         fusion_vec = np.concatenate((res_face, res_body, res_skel));
         
         res=self.cls_fusion.predict_vec(fusion_vec);
         
         return res;
+
+    def predict_all_pil(self,pil_img):
+        """Classify a body language data from a numpy vector object with N elements 
+        
+        Args:
+            pil_img: PIL image 
+        
+        Returns:
+            numpy.array: A numpy array of 4 elements.
+        """
+        
+        res_face, res_body, res_skel = self.get_input_fusion_from_pil(pil_img);
+        
+        fusion_vec = np.concatenate((res_face, res_body, res_skel));
+        
+        res=self.cls_fusion.predict_vec(fusion_vec);
+        
+        return res, res_face, res_body, res_skel;
 
     def from_img_pil(self,pil_img):
         """Classify a body language data from a numpy vector object with N elements 
@@ -113,6 +131,18 @@ class Emotion4Classifier:
         """
         return np.argmax(self.predict_pil(pil_img));
 
+    def from_img_all_pil(self,pil_img):
+        """Classify a body language data from a numpy vector object with N elements 
+        
+        Args:
+            pil_img: PIL image 
+        
+        Returns:
+            int: The class of image.
+        """
+        res, res_face, res_body, res_skel = self.predict_all_pil(pil_img);
+        return np.argmax(res), np.argmax(res_face), np.argmax(res_body), np.argmax(res_skel);
+
     def target_labels(self):
         """Returns the categories of classifier.
         
@@ -121,21 +151,3 @@ class Emotion4Classifier:
         """
         return ['negative','neutro','pain','positive'];
 
-    def dummy_test(self):
-        # Definindo o modelo
-        model = tf.keras.Sequential([
-            tf.keras.layers.Dense(1, input_shape=(4,))
-        ]);
-
-        # Compilando o modelo (opcional neste caso, pois não vamos treinar)
-        model.compile(optimizer='adam', loss='mse');
-
-        # Criando um vetor de entrada com 4 elementos
-        input_data = np.array([[0.5, 0.3, 0.7, 0.2]]);
-
-        # Fazendo uma previsão com o modelo
-        prediction = model.predict(input_data);
-        
-        print('')
-        print(prediction)
-        print('')
