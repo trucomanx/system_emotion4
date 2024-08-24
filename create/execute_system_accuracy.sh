@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MachinePath='/media/fernando/Expansion/'
+MachinePath='/mnt/8811f502-ae19-4dd8-8371-f1915178f581/Fernando'
 
 InTrD=$MachinePath"/DATASET/TESE/BER/BER2024-SOURCE"
 DName="ber2024-source"
@@ -22,6 +22,7 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-file "train.csv" \
                             --dataset-name $DName \
                             --sub-dir $SubDir \
+                            --clean-break 100 \
                             --output-dir $OutDir
 
 python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
@@ -33,6 +34,7 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-file "test.csv" \
                             --dataset-name $DName \
                             --sub-dir $SubDir \
+                            --clean-break 100 \
                             --output-dir $OutDir
 
 rm -f system_accuracy.py
