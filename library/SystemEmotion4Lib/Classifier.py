@@ -120,6 +120,53 @@ class Emotion4Classifier:
         
         return res, res_face, res_body, res_skel;
 
+    def get_input_fusion_from_pil_list(self,pil_img_list):
+        """Classify a body language data from a numpy vector object with N elements 
+        
+        Args:
+            pil_img_list: List of PIL image 
+        
+        Returns:
+            numpy.array: A numpy matrix of 4 columns.
+        """
+        skel_vec_list, body_roi_list, face_roi_list=self.det.process_image_list(pil_img_list);
+        
+        # Verifica errores
+        for skel_vec in skel_vec_list:
+            if skel_vec is None:
+                print('Error because skel_vec is None');
+                sys.exit();
+        
+        ##      
+        res_body_mat = self.cls_body.predict_pil_list(body_roi_list);
+        
+        res_face_mat = self.cls_face.predict_pil_list(face_roi_list);
+        
+        if self.enable_minus==True:
+            res_skel_mat = self.cls_skel.predict_minus_vec_list(skel_vec_list);
+        else:
+            res_skel_mat = self.cls_skel.predict_vec_list(skel_vec_list);
+        
+        return res_face_mat, res_body_mat, res_skel_mat;
+
+    def predict_pil_list(self,pil_img_list):
+        """Classify a body language data from a numpy vector object with N elements 
+        
+        Args:
+            pil_img: List of PIL image 
+        
+        Returns:
+            numpy.array: A numpy matrix of 4 columns.
+        """
+        
+        res_face_mat, res_body_mat, res_skel_mat = self.get_input_fusion_from_pil_list(pil_img_list);
+        
+        fusion_mat = np.concatenate((res_face_mat, res_body_mat, res_skel_mat),axis=1);
+        
+        res=self.cls_fusion.predict_mat(fusion_mat);
+        
+        return res;
+
     def from_img_pil(self,pil_img):
         """Classify a body language data from a numpy vector object with N elements 
         
@@ -130,6 +177,18 @@ class Emotion4Classifier:
             int: The class of image.
         """
         return np.argmax(self.predict_pil(pil_img));
+        
+
+    def from_img_pil_list(self,pil_img_list):
+        """Classify a body language data from a numpy vector object with N elements 
+        
+        Args:
+            pil_img_list: List of PIL image 
+        
+        Returns:
+            numpy.array: The class of image.
+        """
+        return np.argmax(self.predict_pil_list(pil_img_list),axis=1);
 
     def from_img_all_pil(self,pil_img):
         """Classify a body language data from a numpy vector object with N elements 
