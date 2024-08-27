@@ -37,6 +37,8 @@ filepaths = [   'KlingAi/negative.png',
                 'KlingAi/positive.png',
                 'KlingAi/pain_negative.png'];
 
+#filepaths= filepaths * 6;
+
 img_pil_list=[];
 for filepath in filepaths:
     img_pil_list.append(Image.open(filepath));
