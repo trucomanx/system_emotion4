@@ -63,10 +63,10 @@ class Emotion4Classifier:
         Returns:
             numpy.array: A numpy array of 4 elements.
         """
-        skel_vec, body_roi, face_roi=self.det.process_image(pil_img);
+        skel_vec, body_roi, face_roi, body_bbox, face_bbox=self.det.process_image_full(pil_img);
         if skel_vec is None:
-            print('Error because skel_vec is None');
-            sys.exit();
+            print('skel_vec is None');
+            return None, None, None, None, None;
         
         res_body=np.array([0.0,0.0,0.0,0.0]);
         res_face=np.array([0.0,0.0,0.0,0.0]);
@@ -82,7 +82,7 @@ class Emotion4Classifier:
         else:
             res_skel = self.cls_skel.predict_vec(skel_vec);
         
-        return res_face, res_body, res_skel;
+        return res_face, res_body, res_skel, face_bbox, body_bbox;
 
     def predict_pil(self,pil_img):
         """Classify a body language data from a numpy vector object with N elements 
@@ -94,7 +94,9 @@ class Emotion4Classifier:
             numpy.array: A numpy array of 4 elements.
         """
         
-        res_face, res_body, res_skel = self.get_input_fusion_from_pil(pil_img);
+        res_face, res_body, res_skel, face_bbox, body_bbox = self.get_input_fusion_from_pil(pil_img);
+        if res_skel is None:
+            return None;
         
         fusion_vec = np.concatenate((res_face, res_body, res_skel));
         
@@ -112,13 +114,15 @@ class Emotion4Classifier:
             numpy.array: A numpy array of 4 elements.
         """
         
-        res_face, res_body, res_skel = self.get_input_fusion_from_pil(pil_img);
+        res_face, res_body, res_skel, face_bbox, body_bbox = self.get_input_fusion_from_pil(pil_img);
+        if res_skel is None:
+            return None, None, None, None, None, None ;
         
         fusion_vec = np.concatenate((res_face, res_body, res_skel));
         
         res=self.cls_fusion.predict_vec(fusion_vec);
         
-        return res, res_face, res_body, res_skel;
+        return res, res_face, res_body, res_skel, face_bbox, body_bbox;
 
     def get_input_fusion_from_pil_list(self,pil_img_list):
         """Classify a body language data from a numpy vector object with N elements 
@@ -129,7 +133,7 @@ class Emotion4Classifier:
         Returns:
             numpy.array: A numpy matrix of 4 columns.
         """
-        skel_vec_list, body_roi_list, face_roi_list=self.det.process_image_list(pil_img_list);
+        skel_vec_list, body_roi_list, face_roi_list, body_bbox_list, face_bbox_list = self.det.process_image_full_list(pil_img_list);
         
         # Verifica errores
         for skel_vec in skel_vec_list:
@@ -147,9 +151,13 @@ class Emotion4Classifier:
         else:
             res_skel_mat = self.cls_skel.predict_vec_list(skel_vec_list);
         
-        return res_face_mat, res_body_mat, res_skel_mat;
+        return res_face_mat, res_body_mat, res_skel_mat, face_bbox_list, body_bbox_list;
 
     def predict_pil_list(self,pil_img_list):
+        res, _, _, _, _, _ = self.predict_all_pil_list(pil_img_list);
+        return res;
+        
+    def predict_all_pil_list(self,pil_img_list):
         """Classify a body language data from a numpy vector object with N elements 
         
         Args:
@@ -159,13 +167,14 @@ class Emotion4Classifier:
             numpy.array: A numpy matrix of 4 columns.
         """
         
-        res_face_mat, res_body_mat, res_skel_mat = self.get_input_fusion_from_pil_list(pil_img_list);
+        res_face_mat, res_body_mat, res_skel_mat, face_bbox_list, body_bbox_list = self.get_input_fusion_from_pil_list(pil_img_list);
         
         fusion_mat = np.concatenate((res_face_mat, res_body_mat, res_skel_mat),axis=1);
         
         res=self.cls_fusion.predict_mat(fusion_mat);
         
-        return res;
+        return res, res_face_mat, res_body_mat, res_skel_mat, face_bbox_list, body_bbox_list;
+
 
     def from_img_pil(self,pil_img):
         """Classify a body language data from a numpy vector object with N elements 
