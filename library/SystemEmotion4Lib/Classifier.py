@@ -47,7 +47,7 @@ class Emotion4Classifier:
         self.cls_skel=sec.Emotion4Classifier(ncod=model_type_skel);
         
         #mejor esa orden para que cargue al final
-        self.det=opp.Detector(checkpoint='shufflenetv2k16', body_factor=body_factor, face_factor=face_factor);
+        self.det=opp.Detector(checkpoint='shufflenetv2k16', body_factor=body_factor, face_factor=face_factor,face_method=1);
 
         if model_type_skel_enable_minus==True:
             self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion, skel_size=model_type_skel);
