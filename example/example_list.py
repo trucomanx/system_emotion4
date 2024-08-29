@@ -27,7 +27,9 @@ cls=sec.Emotion4Classifier( checkpoint='shufflenetv2k16',
                             model_type_body='efficientnet_b3',
                             model_type_skel=20,
                             model_type_skel_enable_minus=True,
-                            model_type_fusion=7);
+                            model_type_fusion=7,
+                            body_factor=1.0,
+                            face_factor=0.85);
 
 
 labels   = ['negative','neutral','pain','positive'];

@@ -29,7 +29,9 @@ class Emotion4Classifier:
                     model_type_body='efficientnet_b3',
                     model_type_skel=20,
                     model_type_skel_enable_minus=False,
-                    model_type_fusion=11):
+                    model_type_fusion=11,
+                    body_factor=1.0, 
+                    face_factor=1.0):
         """Inicializer of class Emotion4Classifier.
         
         Args:
@@ -45,7 +47,7 @@ class Emotion4Classifier:
         self.cls_skel=sec.Emotion4Classifier(ncod=model_type_skel);
         
         #mejor esa orden para que cargue al final
-        self.det=opp.Detector(checkpoint='shufflenetv2k16');
+        self.det=opp.Detector(checkpoint='shufflenetv2k16', body_factor=body_factor, face_factor=face_factor);
 
         if model_type_skel_enable_minus==True:
             self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion, skel_size=model_type_skel);
@@ -55,7 +57,12 @@ class Emotion4Classifier:
         self.enable_minus=model_type_skel_enable_minus;
         
     def get_input_fusion_from_pil(self,pil_img):
-        """Classify a body language data from a numpy vector object with N elements 
+        """ Retorna a resposta de todos os sistemas bas e os bounding box:
+            res_face, res_body, res_skel, face_bbox, body_bbox.
+            Se nao se achou pessoas entao todos seus elementos sao None.
+            Se se achou uma pessoa, entaoa  saida  e' trabalhavel.
+            Se face nao 'e achado se retorna zeros e bouding box None.
+            Se body nao 'e achado se retorna zeros e bouding box None.
         
         Args:
             pil_img: PIL image 
@@ -65,7 +72,7 @@ class Emotion4Classifier:
         """
         skel_vec, body_roi, face_roi, body_bbox, face_bbox=self.det.process_image_full(pil_img);
         if skel_vec is None:
-            print('skel_vec is None');
+            print('No person was found, will be returned All None.');
             return None, None, None, None, None;
         
         res_body=np.array([0.0,0.0,0.0,0.0]);
@@ -73,9 +80,13 @@ class Emotion4Classifier:
                 
         if body_roi is not None:
             res_body = self.cls_body.predict_pil(body_roi);
+        else:
+            print('Body roi is None, body classifier return zeros.')
         
         if face_roi is not None:
             res_face = self.cls_face.predict_pil(face_roi);
+        else:
+            print('Face roi is None, face classifier return zeros.')
         
         if self.enable_minus==True:
             res_skel = self.cls_skel.predict_minus_vec(skel_vec);
@@ -85,7 +96,8 @@ class Emotion4Classifier:
         return res_face, res_body, res_skel, face_bbox, body_bbox;
 
     def predict_pil(self,pil_img):
-        """Classify a body language data from a numpy vector object with N elements 
+        """Classify a body language data from a Pil image.
+           Return None if any person was not found.
         
         Args:
             pil_img: PIL image 
@@ -93,25 +105,22 @@ class Emotion4Classifier:
         Returns:
             numpy.array: A numpy array of 4 elements.
         """
-        
-        res_face, res_body, res_skel, face_bbox, body_bbox = self.get_input_fusion_from_pil(pil_img);
-        if res_skel is None:
-            return None;
-        
-        fusion_vec = np.concatenate((res_face, res_body, res_skel));
-        
-        res=self.cls_fusion.predict_vec(fusion_vec);
+        res, _, _, _, _, _ = self.predict_all_pil(pil_img);
         
         return res;
 
     def predict_all_pil(self,pil_img):
-        """Classify a body language data from a numpy vector object with N elements 
+        """Classify a body language data from a Pil image.
+           Return None if any person was not found.
         
         Args:
             pil_img: PIL image 
         
         Returns:
-            numpy.array: A numpy array of 4 elements.
+            numpy.array, numpy.array, numpy.array, numpy.array, couple, couple : If any person was not found return all None.
+            In other cases, 4 numpy array of 4 elements and 2 couples with bounding boxs.
+            If body roi was None the bounding box will be None.
+            If face roi was None the bounding box will be None.
         """
         
         res_face, res_body, res_skel, face_bbox, body_bbox = self.get_input_fusion_from_pil(pil_img);
