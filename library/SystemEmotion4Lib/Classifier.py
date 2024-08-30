@@ -31,7 +31,8 @@ class Emotion4Classifier:
                     model_type_skel_enable_minus=False,
                     model_type_fusion=11,
                     body_factor=1.0, 
-                    face_factor=1.0):
+                    face_factor=1.0,
+                    verbose=False):
         """Inicializer of class Emotion4Classifier.
         
         Args:
@@ -56,6 +57,8 @@ class Emotion4Classifier:
         
         self.enable_minus=model_type_skel_enable_minus;
         
+        self.verbose=verbose;
+        
     def get_input_fusion_from_pil(self,pil_img):
         """ Retorna a resposta de todos os sistemas bas e os bounding box:
             res_face, res_body, res_skel, face_bbox, body_bbox.
@@ -72,7 +75,8 @@ class Emotion4Classifier:
         """
         skel_vec, body_roi, face_roi, body_bbox, face_bbox=self.det.process_image_full(pil_img);
         if skel_vec is None:
-            print('No person was found, will be returned All None.');
+            if self.verbose:
+                print('No person was found, will be returned All None.');
             return None, None, None, None, None;
         
         res_body=np.array([0.0,0.0,0.0,0.0]);
@@ -81,12 +85,14 @@ class Emotion4Classifier:
         if body_roi is not None:
             res_body = self.cls_body.predict_pil(body_roi);
         else:
-            print('Body roi is None, body classifier return zeros.')
+            if self.verbose:
+                print('Body roi is None, body classifier return zeros.')
         
         if face_roi is not None:
             res_face = self.cls_face.predict_pil(face_roi);
         else:
-            print('Face roi is None, face classifier return zeros.')
+            if self.verbose:
+                print('Face roi is None, face classifier return zeros.')
         
         if self.enable_minus==True:
             res_skel = self.cls_skel.predict_minus_vec(skel_vec);
@@ -125,6 +131,8 @@ class Emotion4Classifier:
         
         res_face, res_body, res_skel, face_bbox, body_bbox = self.get_input_fusion_from_pil(pil_img);
         if res_skel is None:
+            if self.verbose:
+                print('No person was found, will be returned All None.');
             return None, None, None, None, None, None ;
         
         fusion_vec = np.concatenate((res_face, res_body, res_skel));
