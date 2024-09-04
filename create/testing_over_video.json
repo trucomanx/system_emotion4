@@ -1,10 +1,13 @@
 {
     "input_mp4_file" : "/mnt/8811f502-ae19-4dd8-8371-f1915178f581/Fernando/DATASET/TESE/PATIENT-RECOGNITION/PATIENT-VIDEOS/dataset-toy/drhouse_mini_cut.mp4",
+    "dataset_name" : "ber2024-source",
     "checkpoint": "shufflenetv2k16",
     "model_type_body": "efficientnet_b3",
     "model_type_face": "efficientnet_b3",
     "model_type_skel": 20,
     "model_type_fusion": 11,
     "enable_minus": false,
+    "body_factor":0.95,
+    "face_factor":0.95,
     "output_base_dir" : "/mnt/8811f502-ae19-4dd8-8371-f1915178f581/Fernando/OUTPUTS/DOCTORADO2/system_emotion4_1"
 }
