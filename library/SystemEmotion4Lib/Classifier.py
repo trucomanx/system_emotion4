@@ -32,6 +32,7 @@ class Emotion4Classifier:
                     model_type_fusion=11,
                     body_factor=1.0, 
                     face_factor=1.0,
+                    face_detector_method=1,
                     verbose=False):
         """Inicializer of class Emotion4Classifier.
         
@@ -48,7 +49,7 @@ class Emotion4Classifier:
         self.cls_skel=sec.Emotion4Classifier(ncod=model_type_skel);
         
         #mejor esa orden para que cargue al final
-        self.det=opp.Detector(checkpoint='shufflenetv2k16', body_factor=body_factor, face_factor=face_factor,face_method=1);
+        self.det=opp.Detector(checkpoint='shufflenetv2k16', body_factor=body_factor, face_factor=face_factor,face_method=face_detector_method);
 
         if model_type_skel_enable_minus==True:
             self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion, skel_size=model_type_skel);
@@ -56,6 +57,8 @@ class Emotion4Classifier:
             self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion, skel_size=None);
         
         self.enable_minus=model_type_skel_enable_minus;
+        
+        self.face_detector_method=face_detector_method;
         
         self.verbose=verbose;
         
@@ -225,7 +228,7 @@ class Emotion4Classifier:
         Returns:
             int: The class of image.
         """
-        res, res_face, res_body, res_skel = self.predict_all_pil(pil_img);
+        res, res_face, res_body, res_skel, _, _ = self.predict_all_pil(pil_img);
         return np.argmax(res), np.argmax(res_face), np.argmax(res_body), np.argmax(res_skel);
 
     def target_labels(self):
