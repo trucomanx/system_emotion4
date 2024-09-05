@@ -197,6 +197,11 @@ class Emotion4Classifier:
         
         res=self.cls_fusion.predict_mat(fusion_mat);
         
+        ## Verifica NoPerson
+        ## Criar uma lista de IDs dos elementos que são None ou (0, 0, 0, 0)
+        invalid_ids = [i for i, bbox in enumerate(body_bbox_list) if bbox is None or bbox == (0, 0, 0, 0)];
+        res[invalid_ids,:]=0.0;
+        
         return res, res_face_mat, res_body_mat, res_skel_mat, face_bbox_list, body_bbox_list;
 
 
