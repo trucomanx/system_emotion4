@@ -6,7 +6,6 @@ InTrD=$MachinePath"/DATASET/TESE/BER/BER2024-SOURCE"
 DName="ber2024-source"
 
 OutDir=$MachinePath"/OUTPUTS/DOCTORADO2/system_emotion4_1"
-SubDir="subdir1_minus"
 
 ################################################################################
 export TF_USE_LEGACY_KERAS=1 
@@ -21,7 +20,6 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-dir $InTrD \
                             --dataset-file "train.csv" \
                             --dataset-name $DName \
-                            --sub-dir $SubDir \
                             --enable-minus true \
                             --clean-break 100 \
                             --output-dir $OutDir
@@ -34,7 +32,6 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-dir $InTrD \
                             --dataset-file "test.csv" \
                             --dataset-name $DName \
-                            --sub-dir $SubDir \
                             --enable-minus true \
                             --clean-break 100 \
                             --output-dir $OutDir

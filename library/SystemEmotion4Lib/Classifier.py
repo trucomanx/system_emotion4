@@ -153,13 +153,17 @@ class Emotion4Classifier:
         Returns:
             numpy.array: A numpy matrix of 4 columns.
         """
+        N=len(pil_img_list);
+        
+        # return list's, void's or with elements but ever 
+        # Any element can be None
         skel_vec_list, body_roi_list, face_roi_list, body_bbox_list, face_bbox_list = self.det.process_image_full_list(pil_img_list);
         
-        # Verifica errores
-        for skel_vec in skel_vec_list:
-            if skel_vec is None:
-                print('Error because skel_vec is None');
-                sys.exit();
+        
+        ## Verifica errores
+        #without_person = all(skel_vec is None for skel_vec in skel_vec_list);
+        #if without_person:
+        #    return None,None,None,None,None;
         
         ##      
         res_body_mat = self.cls_body.predict_pil_list(body_roi_list);
