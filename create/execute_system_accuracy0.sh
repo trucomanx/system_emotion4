@@ -22,6 +22,9 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-file "train.csv" \
                             --dataset-name $DName \
                             --enable-minus false \
+                            --face-detector-method 0 \
+                            --body-factor 1.0 \
+                            --face-factor 1.0 \
                             --clean-break 100 \
                             --output-dir $OutDir
 
@@ -34,6 +37,9 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --dataset-file "test.csv" \
                             --dataset-name $DName \
                             --enable-minus false \
+                            --face-detector-method 0 \
+                            --body-factor 1.0 \
+                            --face-factor 1.0 \
                             --clean-break 100 \
                             --output-dir $OutDir
 
