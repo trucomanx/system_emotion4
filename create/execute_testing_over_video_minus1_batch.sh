@@ -24,7 +24,7 @@ python3 testing_over_video.py   --model-type-check 'shufflenetv2k16' \
                                 --face-detector-method 1 \
                                 --body-factor 0.9 \
                                 --face-factor 0.9 \
-                                --batch-size-func 32 \
+                                --batch-size-func 64 \
                                 --output-dir $OutDir
 
 
