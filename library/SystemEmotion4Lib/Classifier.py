@@ -170,6 +170,12 @@ class Emotion4Classifier:
         
         res_face_mat = self.cls_face.predict_pil_list(face_roi_list);
         
+        #print("")
+        #for ID,skel_vec in enumerate(skel_vec_list):
+        #    print(ID,type(skel_vec))
+        #print(len(skel_vec_list))
+        
+        
         if self.enable_minus==True:
             res_skel_mat = self.cls_skel.predict_minus_vec_list(skel_vec_list);
         else:
