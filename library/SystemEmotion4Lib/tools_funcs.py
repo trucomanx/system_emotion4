@@ -149,7 +149,7 @@ def verify_dataset_body_structure(png_files):
 ################################################################################
 
 
-def save_dataset_list_in_csv(file_list, csv_filename, my_func):
+def save_dataset_list_in_csv(directory,file_list, csv_filename, my_func):
     """
     Salva uma lista de tuplas de arquivos em um arquivo CSV e processa os dados com uma função customizada.
 
@@ -159,6 +159,9 @@ def save_dataset_list_in_csv(file_list, csv_filename, my_func):
 
     Parâmetros:
     -----------
+    directory: str
+        Directory path of reference
+    
     file_list : list of tuple
         Uma lista de tuplas, onde cada tupla contém três strings que representam os caminhos dos arquivos 'body', 'face' e 'skeleton'.
     
@@ -182,7 +185,7 @@ def save_dataset_list_in_csv(file_list, csv_filename, my_func):
     ...     ('body/file1.png', 'face/file1.png', 'skeleton/file1.npy'),
     ...     ('body/file2.png', 'face/file2.png', 'skeleton/file2.npy')
     ... ]
-    >>> save_dataset_list_in_csv(file_list, 'output.csv', example_func)
+    >>> save_dataset_list_in_csv('/',file_list, 'output.csv', example_func)
     
     Isso gerará um arquivo 'output.csv' com o seguinte conteúdo:
     
@@ -203,13 +206,16 @@ def save_dataset_list_in_csv(file_list, csv_filename, my_func):
             # Processa os dados com my_func e obtém o resultado
             result = my_func(png_file, face_file, skeleton_file)
             # Escreve a linha no CSV
-            csv_writer.writerow([png_file, face_file, skeleton_file, result])
+            csv_writer.writerow([   os.path.relpath(png_file,directory), 
+                                    os.path.relpath(face_file,directory), 
+                                    os.path.relpath(skeleton_file,directory), 
+                                    result])
 
 
 
 
 
-def save_dataset_list_in_csv_batch(file_list, csv_filename, my_batch_func, batch_size=64):
+def save_dataset_list_in_csv_batch(directory,file_list, csv_filename, my_batch_func, batch_size=64):
     """
     Salva uma lista de tuplas de arquivos em um arquivo CSV e processa os dados em lotes usando uma função customizada.
 
@@ -219,6 +225,9 @@ def save_dataset_list_in_csv_batch(file_list, csv_filename, my_batch_func, batch
 
     Parâmetros:
     -----------
+    directory: str
+        Directory path of reference
+    
     file_list : list of tuple
         Uma lista de tuplas, onde cada tupla contém três strings que representam os caminhos dos arquivos 'body', 'face' e 'skeleton'.
     
@@ -246,7 +255,7 @@ def save_dataset_list_in_csv_batch(file_list, csv_filename, my_batch_func, batch
     ...     ('body/file1.png', 'face/file1.png', 'skeleton/file1.npy'),
     ...     ('body/file2.png', 'face/file2.png', 'skeleton/file2.npy')
     ... ]
-    >>> save_dataset_list_in_csv_batch(file_list, 'output.csv', example_func, batch_size=2)
+    >>> save_dataset_list_in_csv_batch('/',file_list, 'output.csv', example_func, batch_size=2)
     
     Isso gerará um arquivo 'output.csv' com o seguinte conteúdo:
     
@@ -268,6 +277,9 @@ def save_dataset_list_in_csv_batch(file_list, csv_filename, my_batch_func, batch
             results = my_batch_func(batch)
             # Escreve os resultados no CSV
             for file_tuple, result in zip(batch, results):
-                csv_writer.writerow([*file_tuple, result])
+                csv_writer.writerow([   os.path.relpath(file_tuple[0],directory),
+                                        os.path.relpath(file_tuple[1],directory),
+                                        os.path.relpath(file_tuple[2],directory), 
+                                        result])
 
 

@@ -33,7 +33,7 @@ res, file_list = toolf.verify_dataset_body_structure(png_files);
 
 if res:
     print("Todos os",len(file_list), "arquivos existem.");
-    toolf.save_dataset_list_in_csv_batch(file_list, 'output.csv', my_batch_func);
+    toolf.save_dataset_list_in_csv_batch(DIRECTORY,file_list, 'output.csv', my_batch_func);
 else:
     print("Arquivos faltando encontrados:");
     for files in file_list:
