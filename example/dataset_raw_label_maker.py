@@ -120,26 +120,29 @@ def my_batch_func(batch):
     
     return [words[ID] for ID in res];
 
-print('')
+################################################################################
 
-input_csv_path     = os.path.join(INPUT_DIR,INPUT_FILE);
-processed_csv_path = os.path.join(OUTPUT_DIR,OUTPUT_FILE);
+if __name__=="__main__":
 
-print('Input working in csv:',input_csv_path);
-print('       Processed csv:',processed_csv_path);
+    print('')
 
-missing_df, total_length = find_unprocessed_data(input_csv_path, processed_csv_path);
+    input_csv_path     = os.path.join(INPUT_DIR,INPUT_FILE);
+    processed_csv_path = os.path.join(OUTPUT_DIR,OUTPUT_FILE);
 
-if len(missing_df)==0:
-    exit();
+    print('Input working in csv:',input_csv_path);
+    print('       Processed csv:',processed_csv_path);
 
-# Função para adicionar o diretório base a cada valor
-#missing_df = missing_df.applymap(lambda path: f'{INPUT_DIR}/{path}')
-missing_df = missing_df.astype(str).map(lambda path: f'{INPUT_DIR}/{path}')
+    missing_df, total_length = find_unprocessed_data(input_csv_path, processed_csv_path);
+
+    if len(missing_df)==0:
+        exit();
+
+    # Função para adicionar o diretório base a cada valor
+    missing_df = missing_df.astype(str).map(lambda path: f'{INPUT_DIR}/{path}')
 
 
-missing_list = list(missing_df.itertuples(index=False, name=None));
-print(len(missing_list),'of',total_length);
+    missing_list = list(missing_df.itertuples(index=False, name=None));
+    print(len(missing_list),'of',total_length);
 
-toolf.save_dataset_list_in_csv_batch(INPUT_DIR,missing_list,processed_csv_path,my_batch_func,batch_size=16)
+    toolf.save_dataset_list_in_csv_batch(INPUT_DIR,missing_list,processed_csv_path,my_batch_func,batch_size=16)
 
