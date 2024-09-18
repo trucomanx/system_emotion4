@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
-
 import os
 import re
 import csv
+from tqdm import tqdm
 
 def natural_sort_key(s):
     """
@@ -87,6 +87,23 @@ def list_png_in_match_subdir(directory,match_subdir='body',file_ext='.png'):
 
 
 
+def file_exists_and_not_empty(filepath):
+    """
+    Verifica se um arquivo existe e tem peso diferente de zero.
+
+    Args:
+        filepath (str): O caminho do arquivo a ser verificado.
+
+    Returns:
+        bool: True se o arquivo existir e tiver tamanho maior que zero, False caso contrário.
+    """
+    # Verifica se o arquivo existe
+    if os.path.isfile(filepath):
+        # Verifica se o tamanho do arquivo é maior que zero
+        return os.path.getsize(filepath) > 0
+    else:
+        return False
+
 
 def verify_dataset_body_structure(png_files):
     """
@@ -128,13 +145,15 @@ def verify_dataset_body_structure(png_files):
     all_files_exist = True
     result_tuples = []
     
-    for png_file in png_files:
+    for k in tqdm(range(len(png_files))):
+        
+        png_file=png_files[k];
         # Define paths for 'face' and 'skeleton' files
         face_file = os.path.join(os.path.dirname(png_file), '..', 'face', os.path.basename(png_file))
         skeleton_file = os.path.join(os.path.dirname(png_file), '..', 'skeleton', os.path.splitext(os.path.basename(png_file))[0] + '.npy')
         
         # Check if all files exist
-        if os.path.exists(png_file) and os.path.exists(face_file) and os.path.exists(skeleton_file):
+        if file_exists_and_not_empty(png_file) and file_exists_and_not_empty(face_file) and file_exists_and_not_empty(skeleton_file):
             result_tuples.append((png_file, face_file, skeleton_file))
         else:
             all_files_exist = False
@@ -229,10 +248,10 @@ def save_dataset_list_in_csv_batch(directory,file_list, csv_filename, my_batch_f
         Directory path of reference
     
     file_list : list of tuple
-        Uma lista de tuplas, onde cada tupla contém três strings que representam os caminhos dos arquivos 'body', 'face' e 'skeleton'.
+        Uma lista de tuplas, onde cada tupla contém três strings que representam os caminhos absolutos dos arquivos 'body', 'face' e 'skeleton'.
     
     csv_filename : str
-        O nome do arquivo CSV onde os dados serão salvos.
+        O nome do arquivo CSV onde os path relativos serão salvos.
     
     my_batch_func : function
         Uma função personalizada que recebe uma lista de tuplas (cada tupla contém 'body', 'face', 'skeleton') e retorna uma 
@@ -252,10 +271,10 @@ def save_dataset_list_in_csv_batch(directory,file_list, csv_filename, my_batch_f
     ...     return [f"Processed: {b}, {f}, {s}" for b, f, s in batch]
     
     >>> file_list = [
-    ...     ('body/file1.png', 'face/file1.png', 'skeleton/file1.npy'),
-    ...     ('body/file2.png', 'face/file2.png', 'skeleton/file2.npy')
+    ...     ('/absolute/body/file1.png', '/absolute/face/file1.png', '/absolute/skeleton/file1.npy'),
+    ...     ('/absolute/body/file2.png', '/absolute/face/file2.png', '/absolute/skeleton/file2.npy')
     ... ]
-    >>> save_dataset_list_in_csv_batch('/',file_list, 'output.csv', example_func, batch_size=2)
+    >>> save_dataset_list_in_csv_batch('/absolute',file_list, 'output.csv', example_func, batch_size=2)
     
     Isso gerará um arquivo 'output.csv' com o seguinte conteúdo:
     
@@ -263,23 +282,28 @@ def save_dataset_list_in_csv_batch(directory,file_list, csv_filename, my_batch_f
     body/file1.png,face/file1.png,skeleton/file1.npy,Processed: body/file1.png, face/file1.png, skeleton/file1.npy
     body/file2.png,face/file2.png,skeleton/file2.npy,Processed: body/file2.png, face/file2.png, skeleton/file2.npy
     """
-    # Abre o arquivo CSV para escrita
-    with open(csv_filename, mode='w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile)
-        
-        # Escreve o cabeçalho do CSV (opcional)
-        csv_writer.writerow(['body', 'face', 'skeleton', 'label'])
+    # Escreve o cabeçalho apenas se o arquivo não existe
+    if not os.path.exists(csv_filename):
+        with open(csv_filename, mode='w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(['body', 'face', 'skeleton', 'label'])
 
-        # Processa os dados em lotes (batch)
-        for i in range(0, len(file_list), batch_size):
-            batch = file_list[i:i+batch_size]
-            # Processa o lote com my_batch_func
-            results = my_batch_func(batch)
-            # Escreve os resultados no CSV
+    # Processa os dados em lotes (batch)
+    for i in tqdm(range(0, len(file_list), batch_size)):
+        batch = file_list[i:i+batch_size]
+        
+        # Processa o lote com my_batch_func
+        results = my_batch_func(batch)
+        
+        # Abre o arquivo CSV em modo append ('a') para adicionar os novos resultados
+        with open(csv_filename, mode='a', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
             for file_tuple, result in zip(batch, results):
-                csv_writer.writerow([   os.path.relpath(file_tuple[0],directory),
-                                        os.path.relpath(file_tuple[1],directory),
-                                        os.path.relpath(file_tuple[2],directory), 
-                                        result])
+                csv_writer.writerow([
+                    os.path.relpath(file_tuple[0], directory),
+                    os.path.relpath(file_tuple[1], directory),
+                    os.path.relpath(file_tuple[2], directory),
+                    result
+                ])
 
 
