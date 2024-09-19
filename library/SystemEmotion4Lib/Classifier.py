@@ -215,7 +215,7 @@ class Emotion4Classifier:
         
         res_face_mat, res_body_mat, res_skel_mat, face_bbox_list, body_bbox_list = self.get_input_fusion_from_pil_list(pil_img_list);
         
-        if res_skel_mat==None:
+        if res_skel_mat is None:
             L=len(body_bbox_list);
             res = np.zeros((L,4));
         else:
