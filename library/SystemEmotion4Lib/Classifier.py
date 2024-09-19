@@ -41,20 +41,34 @@ class Emotion4Classifier:
         """
         
 
-
+        print('')
+        print('Loading face model.')
         self.cls_face=fec.FaceEmotion4Classifier(model_type=model_type_face);
-
+        print('Face model loaded.')
+        
+        print('')
+        print('Loading body model.')
         self.cls_body=bec.Emotion4Classifier(model_type=model_type_body);
-
+        print('Body model loaded.')
+        
+        print('')
+        print('Loading skel model.')
         self.cls_skel=sec.Emotion4Classifier(ncod=model_type_skel);
+        print('Skeleton model loaded.')
         
         #mejor esa orden para que cargue al final
-        self.det=opp.Detector(checkpoint='shufflenetv2k16', body_factor=body_factor, face_factor=face_factor,face_method=face_detector_method);
-
+        print('')
+        print('Loading openpifpaf model.')
+        self.det=opp.Detector(checkpoint=checkpoint, body_factor=body_factor, face_factor=face_factor,face_method=face_detector_method);
+        print('Openpifpaf model loaded.')
+        
+        print('')
+        print('Loading fusion model.')
         if model_type_skel_enable_minus==True:
             self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion, skel_size=model_type_skel);
         else:
             self.cls_fusion=fsc.Emotion4Classifier(ncod=model_type_fusion, skel_size=None);
+        print('Fusion model loaded.')
         
         self.enable_minus=model_type_skel_enable_minus;
         
@@ -159,6 +173,8 @@ class Emotion4Classifier:
         # Any element can be None
         skel_vec_list, body_roi_list, face_roi_list, body_bbox_list, face_bbox_list = self.det.process_image_full_list(pil_img_list);
         
+        if all(element is None for element in skel_vec_list):
+            return None, None, None, face_bbox_list, body_bbox_list;
         
         ## Verifica errores
         #without_person = all(skel_vec is None for skel_vec in skel_vec_list);
@@ -199,14 +215,18 @@ class Emotion4Classifier:
         
         res_face_mat, res_body_mat, res_skel_mat, face_bbox_list, body_bbox_list = self.get_input_fusion_from_pil_list(pil_img_list);
         
-        fusion_mat = np.concatenate((res_face_mat, res_body_mat, res_skel_mat),axis=1);
-        
-        res=self.cls_fusion.predict_mat(fusion_mat);
-        
-        ## Verifica NoPerson
-        ## Criar uma lista de IDs dos elementos que são None ou (0, 0, 0, 0)
-        invalid_ids = [i for i, bbox in enumerate(body_bbox_list) if bbox is None or bbox == (0, 0, 0, 0)];
-        res[invalid_ids,:]=0.0;
+        if res_skel_mat==None:
+            L=len(body_bbox_list);
+            res = np.zeros((L,4));
+        else:
+            fusion_mat = np.concatenate((res_face_mat, res_body_mat, res_skel_mat),axis=1);
+            
+            res=self.cls_fusion.predict_mat(fusion_mat);
+            
+            ## Verifica NoPerson
+            ## Criar uma lista de IDs dos elementos que são None ou (0, 0, 0, 0)
+            invalid_ids = [i for i, bbox in enumerate(body_bbox_list) if bbox is None or bbox == (0, 0, 0, 0)];
+            res[invalid_ids,:]=0.0;
         
         return res, res_face_mat, res_body_mat, res_skel_mat, face_bbox_list, body_bbox_list;
 
