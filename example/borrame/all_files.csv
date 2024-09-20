@@ -1,7 +1,0 @@
-body, face, skeleton
-path_of/body/file_1.png, path_of/face/file_1.png, path_of/skeleton/file_1.npy
-path_of/body/file_33.png, path_of/face/file_33.png, path_of/skeleton/file_33.npy
-path_of/body/file_35.png, path_of/face/file_35.png, path_of/skeleton/file_35.npy
-path_of/body/file_45.png, path_of/face/file_45.png, path_of/skeleton/file_45.npy
-path_of/body/file_55.png, path_of/face/file_55.png, path_of/skeleton/file_55.npy
-path_of/body/file_65.png, path_of/face/file_65.png, path_of/skeleton/file_65.npy
