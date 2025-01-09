@@ -54,7 +54,7 @@ Since the code uses an old version of keras, it needs to be placed at the beginn
     ## Fusion
     git clone https://github.com/trucomanx/fcnn_emotion4_fusion
     gdown 19I8TAOQhi2NMz-I81ih5Lz8zDXG-7y4O
-    unzip model_fusion_v2.zip -d fcnn_emotion4_fusion/library/FusionEmotion4Lib/models
+    unzip models_fusion_v2.zip -d fcnn_emotion4_fusion/library/FusionEmotion4Lib/models
     cd fcnn_emotion4_fusion/library
     python3 setup.py sdist
     pip3 install dist/FusionEmotion4Lib-*.tar.gz
