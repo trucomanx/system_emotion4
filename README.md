@@ -59,6 +59,41 @@ Since the code uses an old version of keras, it needs to be placed at the beginn
     python3 setup.py sdist
     pip3 install dist/FusionEmotion4Lib-*.tar.gz
 
+
+# Installation requirements summary for dataset FULL2024
+
+    ## Face
+    git clone https://github.com/trucomanx/cnn_face_emotion
+    gdown 18ZTsD3FF0_1H3goacGPZwOgcLOKXhw0b
+    unzip models_face_full.zip -d cnn_face_emotion/library/FaceEmotion4Lib/models
+    cd cnn_face_emotion/library
+    python3 setup.py sdist
+    pip3 install dist/FaceEmotion4Lib-*.tar.gz
+    
+    ## Body
+    git clone https://github.com/trucomanx/cnn_emotion4.git
+    gdown 1_b2ppeKedwKNSDtILOTpreVnl7K3XFY5
+    unzip models_body_full.zip -d cnn_emotion4/library/BodyEmotion4Lib/models
+    cd cnn_emotion4/library
+    python3 setup.py sdist
+    pip3 install dist/BodyEmotion4Lib-*.tar.gz
+
+    ## Skeleton
+    git clone https://github.com/trucomanx/fcnn_emotion4
+    gdown 1EyKgM_SvNIW9OO8kK4IkPuACjdXoP-cv
+    unzip models_skel_full.zip -d fcnn_emotion4/library/SkeletonEmotion4Lib/models
+    cd fcnn_emotion4/library
+    python3 setup.py sdist
+    pip3 install dist/SkeletonEmotion4Lib-*.tar.gz
+    
+    ## Fusion
+    git clone https://github.com/trucomanx/fcnn_emotion4_fusion
+    gdown 1gk8BYQDDF_8t_IUC4tLjYXxdWjOFIWtE
+    unzip models_fusion_full.zip -d fcnn_emotion4_fusion/library/FusionEmotion4Lib/models
+    cd fcnn_emotion4_fusion/library
+    python3 setup.py sdist
+    pip3 install dist/FusionEmotion4Lib-*.tar.gz
+
 # Installation summary
 
     git clone https://github.com/trucomanx/system_emotion4
