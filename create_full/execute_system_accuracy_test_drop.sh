@@ -15,9 +15,9 @@ python3 system_accuracy.py  --model-type-check 'shufflenetv2k16' \
                             --model-type-body 'efficientnet_b3' \
                             --model-type-skel 81 \
                             --model-type-fusion 11 \
-                            --dataset-dir $MachinePath"/DATASET/TESE-DROP-FACE" \
+                            --dataset-dir $MachinePath"/DATASET/TESE-DROP-FACE10" \
                             --dataset-file "test_body.csv" \
-                            --dataset-name "full2024-body-drop-face" \
+                            --dataset-name "full2024-body-drop-face10" \
                             --enable-minus true \
                             --face-detector-method 0 \
                             --body-factor 1.0 \
