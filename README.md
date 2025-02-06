@@ -62,6 +62,14 @@ Since the code uses an old version of keras, it needs to be placed at the beginn
 
 # Installation requirements summary for dataset FULL2024
 
+
+    ## OpenPifPafTools
+    git clone https://github.com/trucomanx/OpenPifPafTools.git
+    cd OpenPifPafTools/src
+    python3 setup.py sdist
+    pip3 install dist/OpenPifPafTools-*.tar.gz
+
+
     ## Face
     git clone https://github.com/trucomanx/cnn_face_emotion
     gdown 18ZTsD3FF0_1H3goacGPZwOgcLOKXhw0b
