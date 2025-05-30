@@ -1,5 +1,13 @@
 # system_emotion4
-system_emotion4
+Body language system 
+
+# Pre-required libraries
+
+* [Block1 GitHub repository](https://github.com/trucomanx/OpenPifPafTools)
+* [Block2 GitHub repository](https://github.com/trucomanx/cnn_face_emotion)
+* [Block3 GitHub repository](https://github.com/trucomanx/cnn_emotion4)
+* [Block4 GitHub repository](https://github.com/trucomanx/fcnn_emotion4)
+* [Block5 GitHub repository](https://github.com/trucomanx/fcnn_emotion4_fusion)
 
 # Using library
 Since the code uses an old version of keras, it needs to be placed at the beginning of the main.py code.
