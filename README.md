@@ -1,7 +1,7 @@
 # system_emotion4
 Body language system 
 
-# Pre-required libraries
+# Pre-requisite Libraries
 
 * [Block1 GitHub repository](https://github.com/trucomanx/OpenPifPafTools)
 * [Block2 GitHub repository](https://github.com/trucomanx/cnn_face_emotion)
