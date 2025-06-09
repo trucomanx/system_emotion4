@@ -18,7 +18,13 @@ Since the code uses an old version of keras, it needs to be placed at the beginn
     import SystemEmotion4Lib.Classifier as sec
     from PIL import Image
     
-    cls=sec.Emotion4Classifier();
+    cls=sec.Emotion4Classifier( checkpoint='shufflenetv2k16',
+                                model_type_face='efficientnet_b3',
+                                model_type_body='efficientnet_b3',
+                                model_type_skel=81,
+                                model_type_skel_enable_minus=True,
+                                model_type_fusion=39,
+                              );
 
     img_pil = Image.new('RGB', (400,300), 'white');
 
