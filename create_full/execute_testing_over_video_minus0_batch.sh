@@ -3,9 +3,9 @@
 MachinePath='/media/fernando/Expansion'
 
 InTrD=$MachinePath"/DATASET/TESE-PATIENT-RECOGNITION/PATIENT-VIDEOS/dataset-toy/drhouse_mini_cut.mp4"
-DName="full2024"
+DName="full2024-minus-drop-plus"
 
-OutDir=$MachinePath"/OUTPUTS/DOCTORADO2/system_emotion4_1"
+OutDir=$MachinePath"/OUTPUTS/DOCTORADO2/system_emotion4_full_1"
 
 ################################################################################
 export TF_USE_LEGACY_KERAS=1 
